@@ -1,0 +1,33 @@
+@if (!isLoading()) {
+  <app-movie-carousel [popularMovieList]="popularMovie()"></app-movie-carousel>
+  <div class="p-4 sm:p-10 h-full w-full">
+    <div class="flex flex-row justify-center">
+      <div class="rounded-3xl bg-gray-200 w-[80%] sm:w-[40%]">
+        <div class="flex justify-between space-x-1.5 p-1">
+          <button 
+            class="transition-all h-7 w-1/2 font-bold"
+            [ngClass]="selectedTab() === 'nowPlaying' ? 'btn-tap-active' : 'border-transparent text-black'"
+            (click)="selectedTab.set('nowPlaying')">
+            Now Showing
+          </button>
+          <button 
+            class="transition-all h-7 w-1/2 font-bold"
+            [ngClass]="selectedTab() === 'topRated' ? 'btn-tap-active' : 'border-transparent text-black'"
+            (click)="selectedTab.set('topRated')">
+            Coming Soon
+          </button>
+        </div>
+      </div> 
+    </div> 
+    <div *ngIf="selectedTab() === 'nowPlaying'">
+      <!-- แสดงข้อมูลหนังที่กำลังฉาย -->
+      <app-movie-card [movieData]="nowPlayingMovie()"></app-movie-card>
+    </div>
+    <div *ngIf="selectedTab() === 'topRated'">
+      <!-- แสดงข้อมูลหนังยอดนิยม -->
+      <app-movie-card [movieData]="comingSoonMovie()"></app-movie-card>
+    </div>
+  </div> 
+} @else {
+  <h1 class="text-red-600">Loading...</h1>
+}

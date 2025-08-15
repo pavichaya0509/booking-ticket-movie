@@ -1,6 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
+import { provideHttpClient } from '@angular/common/http';
+import { AlignJustify, ArrowLeft, ArrowRight, LucideAngularModule, Play, Search, Star, X } from 'lucide-angular';
+import { importProvidersFrom } from '@angular/core';
 
-bootstrapApplication(App, appConfig)
-  .catch((err) => console.error(err));
+bootstrapApplication(App, {
+  ...appConfig,
+  providers: [
+    ...appConfig.providers ?? [],
+    provideHttpClient(),
+    importProvidersFrom(LucideAngularModule.pick({ ArrowLeft, ArrowRight, Star, Play, AlignJustify, X, Search }))
+  ]
+}).catch((err) => console.error(err));

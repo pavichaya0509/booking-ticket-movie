@@ -1,1 +1,75 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@plugin "daisyui";
+
+html {
+  background: white;
+}
+
+body {
+  font-family: 'NotoSansThai', sans-serif;
+  color: black;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSansThai';
+  src: url('./assets/font/NotoSansThai-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}

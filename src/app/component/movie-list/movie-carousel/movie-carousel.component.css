@@ -1,0 +1,7 @@
+.movie-overview {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;       /* จำนวนบรรทัดสูงสุด */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

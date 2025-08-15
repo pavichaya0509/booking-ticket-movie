@@ -1,0 +1,53 @@
+<!-- ✅ Navbar -->
+<div class="navbar bg-white border-b border-gray-200 px-4 shadow-sm fixed top-0 left-0 w-full z-50">
+  <!-- Hamburger (Mobile) -->
+  <div class="lg:hidden mr-2">
+    <lucide-icon [name]="isSidebarOpen() ? 'x' : 'align-justify'" class="w-6 h-6 cursor-pointer" (click)="isSidebarOpen.set(!isSidebarOpen())"></lucide-icon>
+  </div>
+
+  <!-- Logo -->
+  <div class="flex-1">
+    <a class="text-xl font-bold text-gray-800">Movie</a>
+  </div>
+
+  <div class="relative w-full max-w-[50%] sm:max-w-xs md:max-w-sm lg:max-w-md">
+    <input
+      type="text"
+      placeholder="ค้นหาหนัง..."
+      class="input input-bordered w-full pl-10 pr-4 py-2 text-sm placeholder-gray-400 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    <lucide-icon
+      name="search"
+      class="absolute left-1.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+    ></lucide-icon>
+  </div>
+
+
+  <!-- Menu (Desktop only) -->
+  <div class="hidden lg:flex gap-4">
+    <a class="btn btn-ghost">Home</a>
+    <a class="btn btn-ghost">About</a>
+    <a class="btn btn-ghost">Contact</a>
+  </div>
+</div>
+
+<!-- ✅ Sidebar (Mobile Drawer) -->
+<div
+  class="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-40 transform transition-transform duration-300 ease-in-out"
+  [ngClass]="{ '-translate-x-full': !isSidebarOpen(), 'translate-x-0': isSidebarOpen() }"
+>
+  <div class="p-4 border-b flex justify-between items-center">
+    <span class="font-bold text-lg">Menu</span>
+    <button class="btn btn-sm btn-circle" (click)="isSidebarOpen.set(false)">✕</button>
+  </div>
+  <nav class="flex flex-col gap-2 p-4">
+    <a class="btn btn-ghost justify-start">Home</a>
+    <a class="btn btn-ghost justify-start">About</a>
+    <a class="btn btn-ghost justify-start">Contact</a>
+  </nav>
+</div>
+
+<!-- ✅ Overlay when sidebar open -->
+@if (isSidebarOpen()) {
+  <div class="fixed inset-0 z-30 bg-white/10 backdrop-blur-sm" (click)="isSidebarOpen.set(false)"></div>
+}
