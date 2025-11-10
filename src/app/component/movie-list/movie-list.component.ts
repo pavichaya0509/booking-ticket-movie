@@ -51,8 +51,8 @@ export class MovieListComponent implements OnInit {
   transformMovieImagePaths(movieResponse: NowPlayingModel) {
     const transformedResults = movieResponse.results.map((f: any) => ({
       ...f,
-      poster_path: f.poster_path ? "https://image.tmdb.org/t/p/original" + f.poster_path : f.poster_path,
-      backdrop_path: f.backdrop_path ? "https://image.tmdb.org/t/p/original" + f.backdrop_path : f.backdrop_path
+      poster_path: f.poster_path ? this.movieService.imageUrlPath + f.poster_path : 'assets/img/no-image.jpg',
+      backdrop_path: f.backdrop_path ? this.movieService.imageUrlPath + f.backdrop_path : 'assets/img/no-image.jpg',
     }));
 
     return {

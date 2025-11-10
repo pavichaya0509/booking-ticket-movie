@@ -1,0 +1,52 @@
+<div class="w-full h-full">
+  <div class="relative w-full overflow-hidden">
+    <!-- backdrop image -->
+    <div class="min-w-full">
+      <div class="relative overflow-hidden shadow-lg h-[50vh]">
+        <img [src]="checkBackdropPath(movieDetail()?.backdrop_path)" [alt]="movieDetail()?.title ?? ''"
+          (error)="onImgError($event)" loading="lazy" class="w-full h-full object-cover" />
+
+        <!-- Overlay Text -->
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 sm:p-10 md:px-16 flex flex-col justify-end text-white">
+          <div class="flex flex-col justify-between h-[45%]">
+            <div class="flex flex-rows">
+              @for (gen of movieDetail()?.genres ?? []; track $index) {
+                <div class="flex items-center p-2 bg-white mr-2 rounded-md text-black h-5">
+                  <label class="text-xs">{{gen.name}}</label>
+                </div>
+              }
+            </div>
+
+            <p class="text-3xl truncate">
+              {{ movieDetail()?.title }}
+            </p>
+            <div class="flex flex-row sm:flex-row gap-2 items-center">
+              <lucide-icon name="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></lucide-icon>
+              <span class="text-white text-sm">
+                {{ movieDetail()?.vote_average | number: '1.1-1' }} / 10
+              </span>
+              <lucide-icon name="clock-4" class="w-4 h-4"></lucide-icon>
+              <span class="text-white text-sm">
+                {{ movieDetail()?.runtime }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (!isLoadingTrailer()) {
+      <div class="flex items-center justify-center">
+        <div class="relative w-[fit-contant] bg-black rounded-lg overflow-hidden">
+          <iframe class="w-[80vh] h-[50vh]" 
+            [src]="trailerUrl" 
+            frameborder="0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    }
+  </div>
+</div>
