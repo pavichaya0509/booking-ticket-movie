@@ -1,35 +1,38 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { MovieService } from '../../../service/movie-service';
+import { MovieService } from '../../../service/movie-service.service';
 import { MovieDetailModel } from '../../../model/movie-detail-model';
-import { LucideAngularModule } from "lucide-angular";
+import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { VideoTrailerModel } from '../../../model/video-trailer-model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { LoadingScreenComponent } from "../../../shared/loading-screen/loading-screen.component";
+import { LoadingService } from '../../../service/loading.service';
 
 @Component({
   selector: 'app-movie-detail',
   templateUrl: './movie-detail.component.html',
   styleUrls: ['./movie-detail.component.css'],
-  imports: [CommonModule, LucideAngularModule]
+  imports: [CommonModule, LucideAngularModule, LoadingScreenComponent],
 })
 export class MovieDetailComponent implements OnInit {
-
   private sub?: Subscription;
   trailerUrl: SafeResourceUrl | null = null;
   isLoadingTrailer = signal<boolean>(true);
   movieId = signal<number>(0);
   movieDetail = signal<MovieDetailModel | null>(null);
   movieTrailer = signal<VideoTrailerModel | null>(null);
+  loadingService = inject(LoadingService);
 
   constructor(
     private route: ActivatedRoute,
     private movieService: MovieService,
-    private sanitizer: DomSanitizer
-  ) { }
+    private sanitizer: DomSanitizer,
+  ) {}
 
   ngOnInit() {
+    this.loadingService.show();
     this.isLoadingTrailer.set(true);
     this.sub = this.route.paramMap.subscribe(async (param: ParamMap) => {
       const id = Number(param.get('id'));
@@ -37,7 +40,7 @@ export class MovieDetailComponent implements OnInit {
         this.movieId.set(id);
         const [movieDetail, trailer] = await Promise.all([
           firstValueFrom(this.movieService.getMovieDetail(this.movieId())),
-          firstValueFrom(this.movieService.getVideoTrailer(this.movieId()))
+          firstValueFrom(this.movieService.getVideoTrailer(this.movieId())),
         ]);
         if (movieDetail) this.movieDetail.set(movieDetail);
         if (trailer) this.movieTrailer.set(trailer);
@@ -45,12 +48,17 @@ export class MovieDetailComponent implements OnInit {
         if (this.movieTrailer()?.results) {
           this.playTrailer();
         }
+        this.loadingService.hide();
       }
+    }, err => {
+      this.loadingService.hide();
     });
   }
 
   checkBackdropPath(path?: string) {
-    return path ? this.movieService.imageUrlPath + path : 'assets/img/no-image.jpg';
+    return path
+      ? this.movieService.imageUrlPath + path
+      : 'assets/img/no-image.jpg';
   }
 
   onImgError(event: Event) {
@@ -66,10 +74,9 @@ export class MovieDetailComponent implements OnInit {
   playTrailer() {
     const key = this.getYoutubeTrailerKey();
     if (!key) {
-      console.warn("No trailer available");
+      console.warn('No trailer available');
       return;
-    }
-    else {
+    } else {
       const url = `https://www.youtube.com/embed/${key}`;
       this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       this.isLoadingTrailer.set(false);
@@ -78,7 +85,9 @@ export class MovieDetailComponent implements OnInit {
 
   getYoutubeTrailerKey(): string | null {
     const videos = this.movieTrailer()?.results ?? [];
-    const trailer = videos.find(v => v.site === "YouTube" && v.type === "Trailer");
+    const trailer = videos.find(
+      (v) => v.site === 'YouTube' && v.type === 'Trailer'
+    );
     return trailer ? trailer.key : null;
   }
 
