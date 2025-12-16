@@ -41,9 +41,9 @@
     <button class="btn btn-sm btn-circle" (click)="isSidebarOpen.set(false)">✕</button>
   </div>
   <nav class="flex flex-col gap-2 p-4">
-    <a class="btn btn-ghost justify-start" routerLink="/home">Home</a>
-    <a class="btn btn-ghost justify-start">About</a>
-    <a class="btn btn-ghost justify-start">Contact</a>
+    <a class="btn btn-ghost justify-start" routerLink="/home" (click)="isSidebarOpen.set(false)">Home</a>
+    <a class="btn btn-ghost justify-start" (click)="isSidebarOpen.set(false)">About</a>
+    <a class="btn btn-ghost justify-start" (click)="isSidebarOpen.set(false)">Contact</a>
   </nav>
 </div>
 
