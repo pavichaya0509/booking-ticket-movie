@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, EnvironmentInjector, inject, input, OnInit, runInInjectionContext, signal } from '@angular/core';
 import { NowPlayingModel } from '../../../model/api-movie-now-playing-model';
 import { LucideAngularModule } from 'lucide-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-carousel',
@@ -18,7 +19,9 @@ export class MovieCarouselComponent implements OnInit {
   mouseStartX = 0;
   mouseDown = false;
 
-  constructor() {
+  constructor(
+    private router: Router,
+  ) {
     const injector = inject(EnvironmentInjector);
     runInInjectionContext(injector, () => {
       effect(() => {
@@ -32,6 +35,10 @@ export class MovieCarouselComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  routeToDetail(movieId: number) {
+    this.router.navigate(['/detail', movieId]);
   }
 
   nextSlide() {

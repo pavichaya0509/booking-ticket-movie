@@ -62,4 +62,22 @@ export class MovieService {
     });
     return this.http.get<VideoTrailerModel>(url, { headers });
   }
+
+  getCredits(movieId: number): Observable<any> {
+    const url = `${this.movieUrl}/${movieId}/credits`;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.apiKey}`,
+      'accept': 'application/json'
+    });
+    return this.http.get<any>(url, { headers });
+  }
+
+  getSimilarMovies(movieId: number): Observable<any> {
+    const url = `${this.movieUrl}/${movieId}/similar`;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.apiKey}`,
+      'accept': 'application/json'
+    });
+    return this.http.get<any>(url, { headers });
+  }
 }

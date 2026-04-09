@@ -12,9 +12,9 @@
           <div class="flex flex-col justify-between h-[45%]">
             <div class="flex flex-rows">
               @for (gen of movieDetail()?.genres ?? []; track $index) {
-                <div class="flex items-center p-2 bg-white mr-2 rounded-md text-black h-5">
-                  <label class="text-xs">{{gen.name}}</label>
-                </div>
+              <div class="flex items-center p-2 bg-white mr-2 rounded-md text-black h-5">
+                <label class="text-xs">{{gen.name}}</label>
+              </div>
               }
             </div>
 
@@ -37,16 +37,85 @@
     </div>
 
     @if (!isLoadingTrailer()) {
-      <div class="flex items-center justify-center">
-        <div class="relative w-[fit-contant] bg-black rounded-lg overflow-hidden">
-          <iframe class="w-[80vh] h-[50vh]" 
-            [src]="trailerUrl" 
-            frameborder="0"
-            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
+      <div class="flex items-center justify-center mt-4">
+        <div class="relative w-[fit-content] bg-black rounded-lg overflow-hidden">
+          <iframe class="w-[80vh] h-[50vh]" [src]="trailerUrl" frameborder="0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
           </iframe>
         </div>
       </div>
     }
+
+    <!-- Content Section -->
+    <div class="grid grid-cols-12 gap-4 p-4 sm:p-10 md:px-16">
+      <!-- Left Column: Overview & Cast -->
+      <div class="col-span-12 md:col-span-8 lg:col-span-9">
+
+        <!-- Overview -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold mb-2">Overview</h2>
+          <p class="leading-relaxed">
+            {{ movieDetail()?.overview }}
+          </p>
+        </div>
+
+        <!-- Cast -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold mb-4">Top Cast</h2>
+          <div class="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
+            @for (actor of credits()?.cast?.slice(0, 10); track actor.id) {
+            <div class="min-w-[120px] w-[120px]">
+              <div class="w-full h-[180px] rounded-lg overflow-hidden mb-2 bg-gray-800">
+                <img [src]="checkBackdropPath(actor.profile_path)" [alt]="actor.name" (error)="onImgError($event)"
+                  class="w-full h-full object-cover">
+              </div>
+              <p class="font-semibold sm truncate">{{ actor.name }}</p>
+              <p class="text-gray-400 text-xs truncate">{{ actor.character }}</p>
+            </div>
+            }
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Details & Booking -->
+      <div class="col-span-12 md:col-span-4 lg:col-span-3 flex flex-col gap-6">
+
+        <!-- Book Ticket Button -->
+        <button
+          [routerLink]="['/book-ticket', movieId()]"
+          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-lg flex items-center justify-center gap-2
+          cursor-pointer">
+          <lucide-icon name="ticket" class="w-5 h-5"></lucide-icon>
+          Book Tickets
+        </button>
+
+        <!-- Movie Info -->
+        <div class="bg-gray-600 p-4 rounded-lg border border-gray-400">
+          <div class="mb-4">
+            <p class="text-gray-400 text-sm">Status</p>
+            <p class="text-white font-medium">{{ movieDetail()?.status }}</p>
+          </div>
+          <div class="mb-4">
+            <p class="text-gray-400 text-sm">Release Date</p>
+            <p class="text-white font-medium">{{ movieDetail()?.release_date | date:'mediumDate' }}</p>
+          </div>
+          <div class="mb-4">
+            <p class="text-gray-400 text-sm">Original Language</p>
+            <p class="text-white font-medium uppercase">{{ movieDetail()?.original_language }}</p>
+          </div>
+          <div class="mb-4">
+            <p class="text-gray-400 text-sm">Budget</p>
+            <p class="text-white font-medium">{{ movieDetail()?.budget | currency:'USD':'symbol':'1.0-0' }}</p>
+          </div>
+          <div>
+            <p class="text-gray-400 text-sm">Revenue</p>
+            <p class="text-white font-medium">{{ movieDetail()?.revenue | currency:'USD':'symbol':'1.0-0' }}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>

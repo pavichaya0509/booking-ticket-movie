@@ -5,14 +5,17 @@ import { MovieService } from '../../../service/movie-service';
 import { MovieDetailModel } from '../../../model/movie-detail-model';
 import { LucideAngularModule } from "lucide-angular";
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { VideoTrailerModel } from '../../../model/video-trailer-model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { CreditsModel } from '../../../model/credits-model';
+import { SimilarMoviesModel } from '../../../model/similar-movies-model';
 
 @Component({
   selector: 'app-movie-detail',
   templateUrl: './movie-detail.component.html',
   styleUrls: ['./movie-detail.component.css'],
-  imports: [CommonModule, LucideAngularModule]
+  imports: [CommonModule, LucideAngularModule, RouterModule]
 })
 export class MovieDetailComponent implements OnInit {
 
@@ -22,6 +25,8 @@ export class MovieDetailComponent implements OnInit {
   movieId = signal<number>(0);
   movieDetail = signal<MovieDetailModel | null>(null);
   movieTrailer = signal<VideoTrailerModel | null>(null);
+  credits = signal<CreditsModel | null>(null);
+  similarMovies = signal<SimilarMoviesModel | null>(null);
 
   constructor(
     private route: ActivatedRoute,
@@ -35,12 +40,16 @@ export class MovieDetailComponent implements OnInit {
       const id = Number(param.get('id'));
       if (id) {
         this.movieId.set(id);
-        const [movieDetail, trailer] = await Promise.all([
+        const [movieDetail, trailer, credits, similar] = await Promise.all([
           firstValueFrom(this.movieService.getMovieDetail(this.movieId())),
-          firstValueFrom(this.movieService.getVideoTrailer(this.movieId()))
+          firstValueFrom(this.movieService.getVideoTrailer(this.movieId())),
+          firstValueFrom(this.movieService.getCredits(this.movieId())),
+          firstValueFrom(this.movieService.getSimilarMovies(this.movieId()))
         ]);
         if (movieDetail) this.movieDetail.set(movieDetail);
         if (trailer) this.movieTrailer.set(trailer);
+        if (credits) this.credits.set(credits);
+        if (similar) this.similarMovies.set(similar);
         console.log(this.movieDetail(), this.movieTrailer());
         if (this.movieTrailer()?.results) {
           this.playTrailer();
@@ -49,7 +58,7 @@ export class MovieDetailComponent implements OnInit {
     });
   }
 
-  checkBackdropPath(path?: string) {
+  checkBackdropPath(path?: string | null) {
     return path ? this.movieService.imageUrlPath + path : 'assets/img/no-image.jpg';
   }
 
