@@ -34,7 +34,6 @@ export class MovieDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadingService.show();
     this.isLoadingTrailer.set(true);
     this.sub = this.route.paramMap.subscribe(
       async (param: ParamMap) => {
@@ -55,11 +54,11 @@ export class MovieDetailComponent implements OnInit {
           if (this.movieTrailer()?.results) {
             this.playTrailer();
           }
-          this.loadingService.hide();
+          
         }
       },
       (err) => {
-        this.loadingService.hide();
+        
       },
     );
   }
